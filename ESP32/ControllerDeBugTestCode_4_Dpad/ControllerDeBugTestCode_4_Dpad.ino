@@ -28,7 +28,7 @@ void setup() {
   // Optionally forget old keys to prevent reconnect issues
   BP32.forgetBluetoothKeys();
 
-  Serial.println("Setup complete, waiting for controllers...");
+  Serial.println("Setup complete, waiting for controller...");
 }
 
 // Callback when a controller connects
