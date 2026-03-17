@@ -1,10 +1,25 @@
 #include <Bluepad32.h>
 
-GamepadPtr myGamepad;
+GamepadPtr myGamepad = nullptr;
+char macStr[18];   // Global storage for MAC address
+
+// Convert MAC to string
+void macToStr(const uint8_t btaddr[6], char* out) {
+  sprintf(out, "%02X:%02X:%02X:%02X:%02X:%02X",
+          btaddr[0], btaddr[1], btaddr[2],
+          btaddr[3], btaddr[4], btaddr[5]);
+}
 
 void onConnectedGamepad(GamepadPtr gp) {
     Serial.println("Gamepad connected!");
+
     myGamepad = gp;
+
+    // Convert MAC to readable string
+    macToStr(gp->getProperties().btaddr, macStr);
+
+    Serial.print("Controller MAC: ");
+    Serial.println(macStr);
 }
 
 void onDisconnectedGamepad(GamepadPtr gp) {
@@ -25,7 +40,10 @@ void loop() {
 
     if (myGamepad && myGamepad->isConnected()) {
 
-        Serial.print("LX: ");
+        Serial.print("Connected to MAC: ");
+        Serial.print(macStr);
+
+        Serial.print("  LX: ");
         Serial.print(myGamepad->axisX());
 
         Serial.print("  LY: ");

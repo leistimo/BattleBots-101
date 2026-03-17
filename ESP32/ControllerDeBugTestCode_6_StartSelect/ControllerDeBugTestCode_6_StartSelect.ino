@@ -8,6 +8,7 @@ const char* TARGET_MAC = "03:11:34:24:2D:29";
 // Arduino setup function
 void setup() {
 
+
   Serial.begin(115200);
   while (!Serial) { ; } // wait for serial
 
@@ -64,19 +65,19 @@ void onDisconnectedController(ControllerPtr ctl) {
 // Process gamepad input
 void processGamepad(ControllerPtr gamepad) {
   
-  // Print joystick axes
-      Serial.print("Left Stick: X=");
-      Serial.print(gamepad->axisX());
-      Serial.print(" Y=");
-      Serial.print(gamepad->axisY());
+   // Print misc buttons (triggers, special buttons)
+    Serial.print("Misc Buttons: 0x");
+    Serial.print(gamepad->miscButtons(), HEX);
 
-      Serial.print("Right Stick: X=");
-      Serial.print(gamepad->axisRX());
-      Serial.print(" Y=");
-      Serial.print(gamepad->axisRY());
+    if (gamepad->miscButtons() & 0x4) {
+        Serial.println(" Start");
+        }
 
+    if (gamepad->miscButtons() & 0x2) {
+        Serial.println(" Select");
+        }
+     
     Serial.println("-------------------------");
-
  
 }
 

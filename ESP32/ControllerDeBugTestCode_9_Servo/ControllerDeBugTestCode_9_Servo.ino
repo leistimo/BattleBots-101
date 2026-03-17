@@ -1,5 +1,14 @@
 #include <Bluepad32.h>
 
+#include <Wire.h>
+#include <Adafruit_SSD1306.h>
+#include <Adafruit_Sensor.h>
+
+#define SCREEN_WIDTH 128  // OLED display width, in pixels
+#define SCREEN_HEIGHT 32  // OLED display height, in pixels
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire);
+
 ControllerPtr myControllers[BP32_MAX_CONTROLLERS];
 
 // Your Android gamepad MAC address
@@ -9,6 +18,24 @@ const char* TARGET_MAC = "03:11:34:24:2D:29";
 void setup() {
 
   Serial.begin(115200);
+  Wire.begin();  // Initialize I2C communication
+  // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  // Address 0x3C for 128x32
+    Serial.println(F("SSD1306 allocation failed"));
+    for (;;)
+      ;  // Don't proceed, loop forever
+  }
+  display.display();  // Display AdaFruit Logo
+  delay(2000);        // Pause for 2 seconds
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setRotation(0);
+  display.setCursor(0, 0);
+
+  display.println("Message: Enter Values");//loading data prior to display
+  display.display();             //Update the OLED display 
+//}
   while (!Serial) { ; } // wait for serial
 
   Serial.print("Firmware version: ");
@@ -107,9 +134,68 @@ void processGamepad(ControllerPtr gamepad) {
         Serial.println("L_Joy Press");
       }
 
+  // Print DPAD
+      //Serial.print("DPad: 0x");
+      //Serial.print(gamepad->dpad(), HEX);
+
+  // Print joystick axes
+      //Serial.print("Left Stick: X=");
+      //Serial.print(gamepad->axisX());
+      //Serial.print(" Y=");
+  //Serial.print(gamepad->axisY());
+
+
+
+      //Serial.print("Right Stick: X=");
+      //Serial.print(gamepad->axisRX());
+      //Serial.print(" Y=");
+  //Serial.print(gamepad->axisRY());
+
+   
+   // L_joystick = map(gamepad->axisY(), -512, 508, 100, -100);
+        
+   // R_joystick = map(gamepad->axisRY(), -512, 508, 100, -100);
+
+   // if (abs(L_joystick) <= 20) {
+   //   L_joystick = 0;
+   // }
+
+   // if (abs(R_joystick) <= 20) {
+   //   R_joystick = 0;
+   // }
+
+   // if (L_joystick>0){
+   //   Serial.print("Left Forward");
+   // }
+   // else if (L_joystick<0) {
+   //   Serial.print("Left Reverse");
+   // }
     Serial.println("-------------------------");
 
 
+  // Print misc buttons (triggers, special buttons)
+ // Serial.print("Misc Buttons: 0x");
+ // Serial.print(gamepad->miscButtons(), HEX);
+
+  // Optionally print battery and gyro/accel
+ // Serial.print("Battery: ");
+ // Serial.print(gamepad->battery());
+
+ // Serial.print("Gyro: X=");
+ // Serial.print(gamepad->gyroX());
+ // Serial.print(" Y=");
+ // Serial.print(gamepad->gyroY());
+ // Serial.print(" Z=");
+ // Serial.print(gamepad->gyroZ());
+
+ // Serial.print("Accel: X=");
+ // Serial.print(gamepad->accelX());
+ // Serial.print(" Y=");
+ // Serial.print(gamepad->accelY());
+ // Serial.print(" Z=");
+ // Serial.print(gamepad->accelZ());
+
+ 
 }
 
 // Arduino loop
